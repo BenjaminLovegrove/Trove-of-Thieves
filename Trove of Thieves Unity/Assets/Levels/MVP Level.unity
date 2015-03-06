@@ -482,6 +482,10 @@ MonoBehaviour:
   playerTurn: 1
   lastTurn: 0
   playerTurnUI: {fileID: 608836016}
+  endTurnButton: {fileID: 894487420}
+  moveRoll: 0
+  moveTurnTimer: 0
+  moving: 0
 --- !u!1 &569331924
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,7 +586,7 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: -199, y: -301}
+  m_AnchoredPosition: {x: 61, y: -42}
   m_SizeDelta: {x: 350, y: 30}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &608836016
@@ -597,7 +601,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: .196078435, g: .196078435, b: .196078435, a: 1}
+  m_Color: {r: 1, g: .931034446, b: 0, a: 1}
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 20
@@ -610,7 +614,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 'Current Turn: Player X'
 --- !u!222 &608836017
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -768,8 +772,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
-    m_PressedColor: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+    m_HighlightedColor: {r: .654411793, g: .654411793, b: .654411793, a: 1}
+    m_PressedColor: {r: .29411763, g: .29411763, b: .29411763, a: 1}
     m_DisabledColor: {r: .784313738, g: .784313738, b: .784313738, a: .501960814}
     m_ColorMultiplier: 1
     m_FadeDuration: .100000001
