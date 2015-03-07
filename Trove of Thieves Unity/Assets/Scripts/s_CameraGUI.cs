@@ -12,14 +12,31 @@ public class s_CameraGUI : MonoBehaviour {
 
 	public int playerTurn = 1; //0 = unit turn, 1 = p1, 2 = p2
 	public int lastTurn = 0; //What was playerTurns last state
+
 	public Text playerTurnUI;
+	public Text rollText;
+	public Text p1Stash;
+	public Text p2Stash;
+	public Image p1Buy;
+	public Image p2Buy;
 	public Button endTurnButton;
 
 	public int moveRoll;
 	public float moveTurnTimer = 0;
 	public bool moving = false;
 
+	public int lastRoll;
+	public int player1Stash = 0;
+	public int player2Stash = 0;
+
+	public AudioClip rollDice;
+
 	void Start(){
+
+		//p1 first turn roll
+		lastRoll = Random.Range (2,12);
+		audio.PlayOneShot(rollDice);
+		player1Stash += lastRoll;
 
 		//Spawn thieves at start of game
 		spawns = GameObject.FindGameObjectsWithTag ("ThiefSpawn");
@@ -36,8 +53,29 @@ public class s_CameraGUI : MonoBehaviour {
 			EndTurn();
 		}
 
-		//Show which players turn it is
-		playerTurnUI.text = "Current turn: Player " + playerTurn.ToString();
+		//Change UI texts
+		if (playerTurn == 1) {
+			p1Buy.enabled = true;
+		} else {
+			p1Buy.enabled = false;
+		}
+
+		if (playerTurn == 2) {
+			p2Buy.enabled = true;
+		} else {
+			p2Buy.enabled = false;
+		}
+
+		if (playerTurn == 0) {
+			playerTurnUI.text = "Thief move!";
+		} else {
+			playerTurnUI.text = "Player " + playerTurn.ToString ();
+		}
+
+		rollText.text = lastRoll.ToString ();
+		p1Stash.text = player1Stash.ToString ();
+		p2Stash.text = player2Stash.ToString ();
+
 
 		//Enable/disable "end turn button" when player/units turn
 		if (playerTurn == 0) {
@@ -50,47 +88,20 @@ public class s_CameraGUI : MonoBehaviour {
 		}
 	}
 
-	void OnGUI(){
-
-
-
-
-
-
-		//Buttons for testing
-		if (GUILayout.Button ("Move One Tile")){
-			DoMove();
-		}
-		if (GUILayout.Button ("Move Two Tiles")){
-			DoMove2();
-		}
-	}
-
-	void DoMove(){
-		//Testing button 1 - moves units
-		thieves = GameObject.FindGameObjectsWithTag ("Thief");
-		
-		foreach (GameObject thief in thieves) {
-			thief.SendMessage ("DoMove", 1);
-		}
-	}
-	void DoMove2(){
-		//Testing button 2 - moves units
-		thieves = GameObject.FindGameObjectsWithTag ("Thief");
-		
-		foreach (GameObject thief in thieves) {
-			thief.SendMessage ("DoMove", 2);
-		}
-	}
-
 	void EndTurn(){ // This is called when end turn button is pressed
 
 		int tempLastTurn = playerTurn; //this is to get who went last before it changes, but also to not change the actual last change int before using it below
 
 		//Get correct next turn (turns go 1,2,0,2,1,0,1,2,0,2,1 etc.etc.)
 		if (playerTurn == 0 && lastTurn == 1) {
+			lastRoll = Random.Range (2,12);
+			audio.PlayOneShot(rollDice);
+			player1Stash += lastRoll;
 			playerTurn = 1;
 		} else if (playerTurn == 0 && lastTurn == 2){
+			lastRoll = Random.Range (2,12);
+			audio.PlayOneShot(rollDice);
+			player2Stash += lastRoll;
 			playerTurn = 2;
 		} else if (playerTurn == 1 && lastTurn == 2){
 			playerTurn = 0;
@@ -99,8 +110,14 @@ public class s_CameraGUI : MonoBehaviour {
 			playerTurn = 0;
 			UnitTurn();
 		} else if (playerTurn == 2 && lastTurn == 0){
+			lastRoll = Random.Range (2,12);
+			audio.PlayOneShot(rollDice);
+			player1Stash += lastRoll;
 			playerTurn = 1;
 		} else if ((playerTurn == 1) && (lastTurn == 0)){
+			lastRoll = Random.Range (2,12);
+			audio.PlayOneShot(rollDice);
+			player2Stash += lastRoll;
 			playerTurn = 2;
 		}
 
@@ -114,9 +131,11 @@ public class s_CameraGUI : MonoBehaviour {
 
 		moving = true;
 		lastTurn = 0;
-		moveRoll = Random.Range (1, 12);
+		lastRoll = Random.Range (2, 12);
+		audio.PlayOneShot(rollDice);
+		moveRoll = lastRoll;
 
-		moveTurnTimer = moveRoll / 3;
+		moveTurnTimer = 4;
 		foreach (GameObject thief in thieves) {
 			thief.SendMessage ("DoMove", moveRoll);
 		}
